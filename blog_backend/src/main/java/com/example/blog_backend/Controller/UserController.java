@@ -25,5 +25,9 @@ public class UserController {
     public String validateUser(@RequestBody UserRequestDto userRequestDto){
         return userService.validateUser(userRequestDto);
     }
+    @PostMapping("/updatePassword")
+    public String updatePassword(@RequestBody UserRequestDto userRequestDto){
+        return userService.updatePassword(userRequestDto);
+    }
 
 }

@@ -46,4 +46,16 @@ public class UserService {
             return "UserId and Password don't match";
         }
     }
+
+    public String updatePassword(UserRequestDto userRequestDto) {
+        User user = userRepository.findByMail(userRequestDto.getMail());
+        if(Objects.isNull(user)){
+            throw new CustomException("user mail is not valid here");
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashedPassword = encoder.encode(userRequestDto.getPassword());
+        user.setPassword(hashedPassword);
+        userRepository.save(user);
+        return "save password successfully";
+    }
 }
