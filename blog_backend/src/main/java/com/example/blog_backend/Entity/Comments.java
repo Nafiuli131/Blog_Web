@@ -23,4 +23,11 @@ public class Comments {
 
     @Column(name = "blog_id", insertable = false, updatable = false)
     private Long blogId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(name = "user_id", insertable = false, updatable = false)
+    private Long userId;
 }

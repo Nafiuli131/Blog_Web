@@ -6,10 +6,7 @@ import com.example.blog_backend.Entity.Blog;
 import com.example.blog_backend.Service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/blog")
@@ -25,5 +22,10 @@ public class BlogController {
     @PostMapping("/update")
     public ResponseEntity<String> updateBlog(@RequestBody BlogUpdateDto blogUpdateDto){
         return blogService.updateBlog(blogUpdateDto);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteBlog(@PathVariable Long id){
+        return blogService.deleteBlog(id);
     }
 }

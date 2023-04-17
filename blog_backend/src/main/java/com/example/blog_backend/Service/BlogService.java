@@ -4,8 +4,10 @@ import com.example.blog_backend.CustomException.CustomException;
 import com.example.blog_backend.Dto.BlogRequestDto;
 import com.example.blog_backend.Dto.BlogUpdateDto;
 import com.example.blog_backend.Entity.Blog;
+import com.example.blog_backend.Entity.Comments;
 import com.example.blog_backend.Entity.User;
 import com.example.blog_backend.Repository.BlogRepository;
+import com.example.blog_backend.Repository.CommentsRepository;
 import com.example.blog_backend.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ public class BlogService {
     UserRepository userRepository;
     @Autowired
     BlogRepository blogRepository;
+    @Autowired
+    CommentsRepository commentsRepository;
 
     public ResponseEntity<Blog> createBlog(BlogRequestDto blogRequestDto) {
         Blog blog = new Blog();
@@ -43,5 +47,18 @@ public class BlogService {
         } else {
             return ResponseEntity.ok("Updated failed");
         }
+    }
+
+    public ResponseEntity<String> deleteBlog(Long id) {
+        return blogRepository.findById(id)
+                .map(blog -> {
+                    Comments comments = commentsRepository.findByBlogId(id);
+                    if(Objects.nonNull(comments)){
+                        commentsRepository.deleteById(comments.getId());
+                    }
+                    blogRepository.delete(blog);
+                    return ResponseEntity.ok("Deleted successfully");
+                })
+                .orElse(ResponseEntity.ok("Deleted failed"));
     }
 }
