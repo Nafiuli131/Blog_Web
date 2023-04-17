@@ -2,6 +2,7 @@ package com.example.blog_backend.Service;
 
 import com.example.blog_backend.CustomException.CustomException;
 import com.example.blog_backend.Dto.BlogRequestDto;
+import com.example.blog_backend.Dto.BlogUpdateDto;
 import com.example.blog_backend.Entity.Blog;
 import com.example.blog_backend.Entity.User;
 import com.example.blog_backend.Repository.BlogRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class BlogService {
@@ -29,5 +31,17 @@ public class BlogService {
         blog.setUser(user);
         blogRepository.save(blog);
         return ResponseEntity.ok(blog);
+    }
+
+    public ResponseEntity<String> updateBlog(BlogUpdateDto blogUpdateDto) {
+        Optional<Blog> blogOptional = blogRepository.findById(blogUpdateDto.getId());
+        if (blogOptional.isPresent()) {
+            Blog blog = blogOptional.get();
+            blog.setBody(blogUpdateDto.getBody());
+            blogRepository.save(blog);
+            return ResponseEntity.ok("Updated Successfully");
+        } else {
+            return ResponseEntity.ok("Updated failed");
+        }
     }
 }
